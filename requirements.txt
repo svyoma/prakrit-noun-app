@@ -1,2 +1,2 @@
 Flask
-aksharamukha-transliterate
+aksharamukha
