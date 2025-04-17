@@ -8,7 +8,7 @@
 
 A simple web application that generates noun forms in Prakrit based on gender and word-ending patterns.
 
-🌐 **Live App**: [prakrit-noun-app.onrender.com](https://prakrit-noun-app.onrender.com/)
+🌐 **Live App**: [prakrit-noun-app.onrender.com](https://prakrit-noun-app.onrender.com/) | Rust Program: [prakrit-noun](https://github.com/svyoma/prakrit-noun)
 
 ---
 
