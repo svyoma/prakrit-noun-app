@@ -14,22 +14,16 @@ A simple web application that generates noun forms in Prakrit based on gender an
 
 ## ✨ Features
 
-- Generates inflected forms for **masculine** nouns ending in:
+- Generates inflected forms for **masculine**, **feminine**, **neuter** nouns ending in:
   - **-a**
+  - **-ā**
   - **-i**
+  - **-ī**
   - **-u**
+  - **ū**
 - Clean and minimal web interface for quick lookups
 - Instant form generation based on input noun
-
-## 🚧 Coming Soon
-
-We're actively working to expand the generator! Future support will include:
-
-- **Feminine** noun forms
-- **Neuter** noun forms
-- Possibly support for irregular patterns and other noun types
-
-Stay tuned for updates! 📜
+- Shows form in Devanāgarī and Harvard Kyoto/SLP1
 
 ## 📦 Tech Stack
 
