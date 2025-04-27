@@ -52,30 +52,7 @@
       position: relative;
       overflow: hidden;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      min-height: 200px; /* Adjust as needed */
-      height: auto !important; /* Override any fixed height */
-      padding-bottom: 2rem !important; /* Ensure there's room for the paragraph */
-
-    } 
-
-    header p {
-    position: relative !important;
-    z-index: 5 !important; /* Higher than any existing z-index */
-    color: white !important;
-    display: block !important;
-    margin-top: 1rem !important;
-    font-size: 1.2rem !important;
     }
-
-        header a {
-        color: var(--light);
-        text-decoration: underline;
-        transition: var(--transition);
-        }
-
-        header a:hover {
-        opacity: 0.8;
-        }
     
     header::before {
       content: '';
@@ -98,8 +75,6 @@
       letter-spacing: -0.5px;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     }
-    
-    /* Add this to your existing header CSS */
     
     .form-card {
       background: white;
@@ -448,11 +423,6 @@
       h1 {
         font-size: 2rem;
       }
-
-      h3 {
-        font-size: 0.75rem;
-      }
-
       
       .custom-select select {
         font-size: 16px; /* Prevents iOS zoom */
@@ -465,12 +435,11 @@
   </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-          <h1>Prakrit Noun Form Generator</h1>
-          <p>Developed by <a href="https://svyoma.github.io/about" target="_blank" rel="noopener noreferrer">svyoma</a></p>
-        </div>
-      </header>      
+  <header>
+    <div class="container">
+      <h1>Prakrit Noun Form Generator</h1>
+    </div>
+  </header>
   
   <div class="container">
     <div class="form-card">
@@ -621,7 +590,7 @@ const tableContainers = document.querySelectorAll('.table-container');
         });
         
         if (!res.ok) {
-          throw new Error('Failed to generate forms');
+          throw new Error('Failed to generate forms. Please enter valid Prakrit word.');
         }
         
         latestData = await res.json();
@@ -678,7 +647,7 @@ const tableContainers = document.querySelectorAll('.table-container');
         
       } catch (error) {
         console.error('Error:', error);
-        showToast('Failed to generate forms. Please try again.');
+        showToast('Failed to generate forms. Please enter valid Prakrit word.');
       } finally {
         // Reset button state
         btnText.textContent = 'Generate Forms';
