@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, jsonify
 from aksharamukha import transliterate
+import re
 import os
 
 app = Flask(__name__)
@@ -16,6 +17,63 @@ def transliterate_to_hk(text):
 
 def transliterate_output(text, target):
     return transliterate.process('HK', target, text)
+
+def validate_prakrit_characters(text):
+    # Convert to HK for consistent checking
+    hk_text = transliterate_to_hk(text)
+    
+    # Single characters not found in Prakrit
+    forbidden_singles = ['R', 'RR', 'lR', 'lRR', 'H', 'S']
+    for char in forbidden_singles:
+        if char in hk_text:
+            return False, f"The character '{char}' is not found in Prakrit."
+    
+    # Check for any visarga (aH)
+    if 'H' in hk_text:
+        return False, f"The visarga (ः/H) is not found in Prakrit."
+    
+    # Define allowed conjuncts
+    allowed_conjuncts = [
+        'kk', 'kkh', 'gg', 'ggh', 'cc', 'cch', 'jj', 'jjh', 
+        'TT', 'TTh', 'DD', 'DDh', 'NN', 'tt', 'tth', 'dd', 'ddh', 
+        'nn', 'pp', 'pph', 'bb', 'bbh', 'mm', 'yy', 'rr', 'll', 
+        'vv', 'ss', 'zz', 'dr', 'mh', 'nh', 'lh'
+    ]
+    
+    # Special consonants that can form conjuncts with any consonant
+    special_consonants = ['G', 'J', 'N', 'n', 'm']
+    
+    # All single consonants in HK scheme
+    all_consonants = ['k', 'kh', 'g', 'gh', 'G', 'c', 'ch', 'j', 'jh', 'J', 
+                      'T', 'Th', 'D', 'Dh', 'N', 't', 'th', 'd', 'dh', 'n', 
+                      'p', 'ph', 'b', 'bh', 'm', 'y', 'r', 'l', 'v', 's', 'z', 'h']
+    
+    # Find all potential conjuncts in the text
+    # This regex looks for consonant clusters (no vowels between them)
+    potential_conjuncts = re.findall(r'[kgcjTDNtdnpbmyrlvszh][kgcjTDNtdnpbmyrlvszh]+', hk_text)
+    
+    for conjunct in potential_conjuncts:
+        # Check if this is an allowed conjunct
+        if conjunct in allowed_conjuncts:
+            continue
+            
+        # Check if it starts with a special consonant
+        valid = False
+        for special in special_consonants:
+            if conjunct.startswith(special):
+                valid = True
+                break
+                
+        # Check if it ends with a special consonant
+        for special in special_consonants:
+            if conjunct.endswith(special):
+                valid = True
+                break
+                
+        if not valid:
+            return False, f"The conjunct '{conjunct}' is not allowed in Prakrit."
+    
+    return True, ""
 
 def remove_last_vowel(word):
     for i in reversed(range(len(word))):
@@ -50,7 +108,12 @@ def generate():
 
     if not word:
         return jsonify({'error': 'Empty input'})
-
+    
+    # Validate if the word contains valid Prakrit characters
+    is_valid, error_message = validate_prakrit_characters(word)
+    if not is_valid:
+        return jsonify({'error': error_message})
+    
     word = transliterate_to_hk(word)
     ending = word[-1] if word else ''
 
